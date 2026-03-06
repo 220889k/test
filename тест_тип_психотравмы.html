@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест: Какой у тебя тип психотравмы?</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Georgia', serif;
+    background: #FDF8F2;
+    color: #3D3D3D;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .header .author {
+    font-size: 13px;
+    color: #C0392B;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+    color: #3D3D3D;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+
+  .header h1 span {
+    color: #C0392B;
+  }
+
+  .header p {
+    font-size: 16px;
+    color: #888;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    margin-bottom: 32px;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 8px;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: #E8E0D5;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: #C0392B;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* QUESTION */
+  .question-card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    margin-bottom: 24px;
+  }
+
+  .question-number {
+    font-size: 12px;
+    color: #C0392B;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .question-text {
+    font-size: 20px;
+    line-height: 1.5;
+    color: #3D3D3D;
+    margin-bottom: 28px;
+  }
+
+  /* OPTIONS */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .option {
+    padding: 16px 20px;
+    border: 2px solid #E8E0D5;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #3D3D3D;
+    background: #FAFAFA;
+    text-align: left;
+  }
+
+  .option:hover {
+    border-color: #C0392B;
+    background: #FDF8F2;
+    transform: translateX(4px);
+  }
+
+  .option.selected {
+    border-color: #C0392B;
+    background: #FDF8F2;
+    color: #C0392B;
+    font-weight: bold;
+  }
+
+  /* NEXT BUTTON */
+  .btn-next {
+    width: 100%;
+    padding: 18px;
+    background: #C0392B;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: none;
+    font-family: 'Georgia', serif;
+  }
+
+  .btn-next:hover {
+    background: #A93226;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(192,57,43,0.3);
+  }
+
+  .btn-next.visible {
+    display: block;
+  }
+
+  /* RESULTS */
+  .result-card {
+    display: none;
+    background: white;
+    border-radius: 16px;
+    padding: 40px 32px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    text-align: center;
+  }
+
+  .result-card.visible {
+    display: block;
+  }
+
+  .result-emoji {
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+
+  .result-label {
+    font-size: 12px;
+    color: #C0392B;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .result-title {
+    font-size: 28px;
+    color: #3D3D3D;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+
+  .result-subtitle {
+    font-size: 16px;
+    color: #C0392B;
+    font-style: italic;
+    margin-bottom: 24px;
+  }
+
+  .result-divider {
+    height: 2px;
+    background: #F0EAE0;
+    margin: 24px 0;
+    border-radius: 1px;
+  }
+
+  .result-section-title {
+    font-size: 13px;
+    color: #888;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    text-align: left;
+  }
+
+  .result-pain {
+    background: #FDF8F2;
+    border-left: 4px solid #C0392B;
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 16px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #3D3D3D;
+  }
+
+  .result-phrase {
+    background: #3D3D3D;
+    color: white;
+    padding: 20px 24px;
+    border-radius: 12px;
+    font-size: 18px;
+    line-height: 1.5;
+    font-style: italic;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .result-course {
+    background: linear-gradient(135deg, #C0392B, #A93226);
+    color: white;
+    padding: 28px;
+    border-radius: 16px;
+    margin-top: 32px;
+  }
+
+  .result-course h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .result-course p {
+    font-size: 15px;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: 20px;
+  }
+
+  .btn-course {
+    display: block;
+    background: white;
+    color: #C0392B;
+    padding: 16px 32px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: 'Georgia', serif;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+  }
+
+  .btn-course:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+
+  .restart-btn {
+    margin-top: 16px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: 'Georgia', serif;
+  }
+
+  /* INTRO */
+  .intro-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px 32px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    text-align: center;
+  }
+
+  .intro-card h2 {
+    font-size: 22px;
+    margin-bottom: 16px;
+    color: #3D3D3D;
+  }
+
+  .intro-card p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .btn-start {
+    background: #C0392B;
+    color: white;
+    border: none;
+    padding: 18px 48px;
+    border-radius: 12px;
+    font-size: 17px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Georgia', serif;
+  }
+
+  .btn-start:hover {
+    background: #A93226;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(192,57,43,0.3);
+  }
+
+  .types-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .type-chip {
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .type-chip.north { background: #EBF5FB; color: #2980B9; }
+  .type-chip.south { background: #FEF9E7; color: #D4AC0D; }
+  .type-chip.west  { background: #FDEDEC; color: #C0392B; }
+  .type-chip.east  { background: #EAFAF1; color: #1E8449; }
+
+  @media (max-width: 480px) {
+    .container { padding: 24px 16px; }
+    .question-card { padding: 24px 20px; }
+    .question-text { font-size: 17px; }
+    .result-card { padding: 28px 20px; }
+    .types-preview { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="author">Кира Яновска • Психолог</div>
+    <h1>Какой у тебя <span>тип психотравмы</span>?</h1>
+    <p>3 минуты — и ты узнаешь, почему одни и те же ситуации повторяются снова и снова</p>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro-card" id="intro">
+    <h2>Прежде чем начать</h2>
+    <p>Каждая из нас реагирует на боль по-своему. Кто-то замораживается. Кто-то взрывается. Кто-то уходит в себя. Кто-то кормит всех вокруг.<br><br>Этот тест покажет твой тип — и объяснит, откуда растут твои главные проблемы.</p>
+    <div class="types-preview">
+      <div class="type-chip north">🧊 Контролёр</div>
+      <div class="type-chip south">🔥 Чувственная</div>
+      <div class="type-chip west">⚡ Сильная</div>
+      <div class="type-chip east">🌊 Интуит</div>
+    </div>
+    <p style="font-size:13px; color:#aaa;">Нет правильных или неправильных ответов.<br>Отвечай первым что приходит в голову.</p>
+    <button class="btn-start" onclick="startTest()">Начать тест →</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" style="display:none;">
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="progress-text">Вопрос 1 из 10</span>
+        <span id="progress-pct">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="question-number" id="q-number">Вопрос 1</div>
+      <div class="question-text" id="q-text"></div>
+      <div class="options" id="q-options"></div>
+    </div>
+
+    <button class="btn-next" id="btn-next" onclick="nextQuestion()">Следующий вопрос →</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="result">
+    <div class="result-emoji" id="r-emoji"></div>
+    <div class="result-label">Твой тип</div>
+    <div class="result-title" id="r-title"></div>
+    <div class="result-subtitle" id="r-subtitle"></div>
+    <div class="result-divider"></div>
+    <div class="result-section-title">Твоя главная боль</div>
+    <div class="result-pain" id="r-pain"></div>
+    <div class="result-section-title">Фраза которую ты говоришь себе каждый день</div>
+    <div class="result-phrase" id="r-phrase"></div>
+    <div class="result-section-title">Что это значит для тебя</div>
+    <div class="result-pain" id="r-meaning"></div>
+    <div class="result-course">
+      <h3 id="r-course-title"></h3>
+      <p id="r-course-text"></p>
+      <button class="btn-course" onclick="sendResult()" style="margin-bottom:12px;">Отправить результат Кире →</button>
+      <button class="btn-course" onclick="goToChannel()" style="background:#3D3D3D;">Просто подписаться на канал →</button>
+    </div>
+    <button class="restart-btn" onclick="restartTest()">Пройти тест заново</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    text: "Когда что-то идёт не по плану — что ты делаешь первым делом?",
+    options: [
+      { text: "Перестраиваю план. Нахожу новый алгоритм. Контролирую.", type: "N" },
+      { text: "Чувствую тревогу и начинаю звонить близким.", type: "S" },
+      { text: "Беру ситуацию в свои руки и действую немедленно.", type: "W" },
+      { text: "Ухожу в себя. Мне нужно время подумать.", type: "E" }
+    ]
+  },
+  {
+    text: "Подруга не ответила на твоё сообщение уже второй день. Твоя реакция?",
+    options: [
+      { text: "Думаю что она занята. Жду. Не беспокою.", type: "N" },
+      { text: "Перечитываю переписку — вдруг я что-то не так написала?", type: "S" },
+      { text: "Пишу ещё раз. Мне важно получить ответ.", type: "W" },
+      { text: "Чувствую что что-то не так. Просто знаю.", type: "E" }
+    ]
+  },
+  {
+    text: "Как ты обычно справляешься со стрессом?",
+    options: [
+      { text: "Иду на тренировку или работаю ещё больше.", type: "N" },
+      { text: "Ем что-то вкусное и ищу тепла рядом.", type: "S" },
+      { text: "Решаю проблему. Стресс от безделья.", type: "W" },
+      { text: "Ухожу в себя, в книги, в музыку, в свой мир.", type: "E" }
+    ]
+  },
+  {
+    text: "Что тебя задевает сильнее всего?",
+    options: [
+      { text: "Когда мой труд не замечают или не ценят.", type: "N" },
+      { text: "Когда меня отвергают или не принимают.", type: "S" },
+      { text: "Когда меня не уважают или игнорируют мой авторитет.", type: "W" },
+      { text: "Когда меня не понимают или называют странной.", type: "E" }
+    ]
+  },
+  {
+    text: "Как выглядит твой идеальный вечер?",
+    options: [
+      { text: "Всё по плану. Тишина. Порядок. Хороший фильм.", type: "N" },
+      { text: "В компании. Смех, еда, разговоры по душам.", type: "S" },
+      { text: "Я что-то сделала и вижу результат. Продуктивно.", type: "W" },
+      { text: "Одна. С мыслями, музыкой, идеями.", type: "E" }
+    ]
+  },
+  {
+    text: "Тебя попросили сделать что-то без чётких инструкций. Как ты себя чувствуешь?",
+    options: [
+      { text: "Некомфортно. Мне нужна чёткость.", type: "N" },
+      { text: "Тревожно. Вдруг сделаю не так и расстрою?", type: "S" },
+      { text: "Нормально. Я сама разберусь.", type: "W" },
+      { text: "Хорошо. Свобода — это моё.", type: "E" }
+    ]
+  },
+  {
+    text: "Что ты думаешь о деньгах?",
+    options: [
+      { text: "Деньги — это справедливая оценка моего труда.", type: "N" },
+      { text: "Деньги приходят и уходят. Главное — отношения.", type: "S" },
+      { text: "Деньги — это власть и статус. Я хочу их.", type: "W" },
+      { text: "Деньги — инструмент. Для свободы и идей.", type: "E" }
+    ]
+  },
+  {
+    text: "Как ты ведёшь себя в конфликте?",
+    options: [
+      { text: "Стараюсь разобраться логически. Факты важнее эмоций.", type: "N" },
+      { text: "Мне больно. Я могу заплакать или замолчать.", type: "S" },
+      { text: "Иду в лобовую. Я не отступаю.", type: "W" },
+      { text: "Ухожу. Мне нужно обдумать всё в тишине.", type: "E" }
+    ]
+  },
+  {
+    text: "Что тебе говорили в детстве чаще всего?",
+    options: [
+      { text: "Делай хорошо. Будь аккуратной. Не подведи.", type: "N" },
+      { text: "Не плачь. Не капризничай. Будь удобной.", type: "S" },
+      { text: "Будь сильной. Не жалуйся. Справляйся сама.", type: "W" },
+      { text: "Не выдумывай. Живи как все. Будь проще.", type: "E" }
+    ]
+  },
+  {
+    text: "Что ты чувствуешь когда говоришь \"нет\"?",
+    options: [
+      { text: "Тревогу — вдруг нарушила правила или подвела.", type: "N" },
+      { text: "Вину. Мне кажется я причинила боль.", type: "S" },
+      { text: "Ничего особенного. Нет — значит нет.", type: "W" },
+      { text: "Облегчение — но потом долго думаю правильно ли.", type: "E" }
+    ]
+  }
+];
+
+const results = {
+  N: {
+    emoji: "🧊",
+    title: "Контролёр",
+    subtitle: "«Всё должно быть по плану»",
+    pain: "Ты живёшь в постоянном напряжении — потому что держишь всё под контролем. Работаешь лучше всех, делаешь лучше всех. Но твой труд не замечают. Деньги и признание уходят к тем кто умеет себя продавать — а не делать. И ты не понимаешь почему. Ведь ты всё делала правильно.",
+    phrase: "«Я просто должна сделать это хорошо. Сама. Как всегда.»",
+    meaning: "Твоя психотравма — это страх ошибки и невидимость. Ты научилась быть идеальной чтобы тебя наконец заметили. Но заметили только результат — не тебя. И ты устала быть функцией.",
+    courseTitle: "Курс «Жить свою жизнь» — для тебя",
+    courseText: "Ты узнаешь откуда взялась эта программа «делай хорошо и молчи». Вернёшь право на ошибку. Перестанешь держать всё на себе. И наконец почувствуешь что твоя ценность — не в результате."
+  },
+  S: {
+    emoji: "🔥",
+    title: "Чувственная",
+    subtitle: "«Всем хорошо — значит и мне хорошо»",
+    pain: "Ты живёшь через эмоции и людей. Когда тебя любят — ты летишь. Когда отвергают — падаешь. Ты отдаёшь всё. Тепло, время, еду, заботу. И в глубине души ждёшь того же в ответ. Но получаешь не всегда. И тогда — опустошение.",
+    phrase: "«Лишь бы все были довольны. А я потом как-нибудь.»",
+    meaning: "Твоя психотравма — это зависимость от оценки других. Ты научилась быть нужной чтобы тебя не бросили. Но в этой гонке за чужим одобрением — потеряла себя.",
+    courseTitle: "Курс «Жить свою жизнь» — для тебя",
+    courseText: "Ты узнаешь почему твоё настроение зависит от чужих реакций. Научишься наполнять себя — не едой и не чужой любовью. И наконец поймёшь что ты нужна себе первой."
+  },
+  W: {
+    emoji: "⚡",
+    title: "Сильная",
+    subtitle: "«Я справлюсь. Я всегда справляюсь.»",
+    pain: "Ты привыкла тянуть всё сама. Слабость — не для тебя. Ты не просишь помощи. Ты не жалуешься. Ты просто делаешь. Но внутри — давно кончились силы. И ты злишься. На всех кто слабее. На себя что не можешь остановиться.",
+    phrase: "«Если не я — то кто? Надо просто взять себя в руки.»",
+    meaning: "Твоя психотравма — это страх потерять контроль и показаться слабой. Ты научилась быть сильной чтобы выжить. Но эта броня давно стала тюрьмой.",
+    courseTitle: "Курс «Жить свою жизнь» — для тебя",
+    courseText: "Ты узнаешь откуда эта установка «справляйся сама». Научишься просить помощь без стыда. И наконец позволишь себе быть не сильной — а живой."
+  },
+  E: {
+    emoji: "🌊",
+    title: "Интуит",
+    subtitle: "«Я чувствую — но мне не верят»",
+    pain: "Ты видишь то что другие не видят. Чувствуешь то что ещё не произошло. Но тебя всю жизнь называли странной, выдумщицей, «слишком чувствительной». И ты научилась не доверять себе. Ушла в свой мир — потому что в этом тебя не понимали.",
+    phrase: "«Наверное я преувеличиваю. Наверное мне кажется.»",
+    meaning: "Твоя психотравма — это недоверие к себе. Ты научилась сомневаться в своей интуиции потому что её слишком часто обесценивали. Теперь ты живёшь в иллюзиях — потому что реальность слишком часто разочаровывала.",
+    courseTitle: "Курс «Жить свою жизнь» — для тебя",
+    courseText: "Ты узнаешь как вернуть доверие к своей интуиции. Научишься жить здесь — а не в своих мирах. И наконец перестанешь извиняться за то что чувствуешь слишком много."
+  }
+};
+
+let current = 0;
+let scores = { N: 0, S: 0, W: 0, E: 0 };
+let selected = null;
+
+function startTest() {
+  document.getElementById('intro').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[current];
+  selected = null;
+
+  document.getElementById('q-number').textContent = `Вопрос ${current + 1}`;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('progress-text').textContent = `Вопрос ${current + 1} из ${questions.length}`;
+  document.getElementById('progress-pct').textContent = `${Math.round((current / questions.length) * 100)}%`;
+  document.getElementById('progress-fill').style.width = `${(current / questions.length) * 100}%`;
+
+  const btn = document.getElementById('btn-next');
+  btn.classList.remove('visible');
+  btn.textContent = current === questions.length - 1 ? 'Узнать результат →' : 'Следующий вопрос →';
+
+  const optionsEl = document.getElementById('q-options');
+  optionsEl.innerHTML = '';
+
+  // Shuffle options
+  const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+
+  shuffled.forEach((opt, i) => {
+    const el = document.createElement('button');
+    el.className = 'option';
+    el.textContent = opt.text;
+    el.onclick = () => selectOption(el, opt.type);
+    optionsEl.appendChild(el);
+  });
+}
+
+function selectOption(el, type) {
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selected = type;
+  document.getElementById('btn-next').classList.add('visible');
+}
+
+function nextQuestion() {
+  if (!selected) return;
+  scores[selected]++;
+  current++;
+
+  if (current >= questions.length) {
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quiz').style.display = 'none';
+
+  const topType = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  const r = results[topType];
+
+  document.getElementById('r-emoji').textContent = r.emoji;
+  document.getElementById('r-title').textContent = r.title;
+  document.getElementById('r-subtitle').textContent = r.subtitle;
+  document.getElementById('r-pain').textContent = r.pain;
+  document.getElementById('r-phrase').textContent = r.phrase;
+  document.getElementById('r-meaning').textContent = r.meaning;
+  document.getElementById('r-course-title').textContent = r.courseTitle;
+  document.getElementById('r-course-text').textContent = r.courseText;
+
+  const resultCard = document.getElementById('result');
+  resultCard.classList.add('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToCourse() {
+  window.open('https://t.me/+wj-YhoOqFVVlNzEy', '_blank');
+}
+
+function goToChannel() {
+  window.open('https://t.me/+wj-YhoOqFVVlNzEy', '_blank');
+}
+
+function goToPersonal() {
+  window.open('https://t.me/kirayanovska', '_blank');
+}
+
+function sendResult() {
+  const topType = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  const typeNames = {
+    N: 'Контролёр 🧊',
+    S: 'Чувственная 🔥',
+    W: 'Сильная ⚡',
+    E: 'Интуит 🌊'
+  };
+  const typeName = typeNames[topType];
+  const message = encodeURIComponent(`Привет Кира! Я прошла твой тест. Мой тип — ${typeName}. Хочу узнать больше о курсе.`);
+  window.open(`https://t.me/kirayanovska?text=${message}`, '_blank');
+}
+
+function restartTest() {
+  current = 0;
+  scores = { N: 0, S: 0, W: 0, E: 0 };
+  selected = null;
+  document.getElementById('result').classList.remove('visible');
+  document.getElementById('quiz').style.display = 'block';
+  showQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
