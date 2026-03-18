@@ -423,7 +423,9 @@
       <h3 id="r-course-title"></h3>
       <p id="r-course-text"></p>
       <button class="btn-course" onclick="sendResult()" style="margin-bottom:12px;">Отправить результат Кире →</button>
+     <button class="btn-course" onclick="goToInstagram()" style="margin-bottom:12px;">Написать в Instagram →</button>
       <button class="btn-course" onclick="goToChannel()" style="background:#3D3D3D;">Просто подписаться на канал →</button>
+    
     </div>
     <button class="restart-btn" onclick="restartTest()">Пройти тест заново</button>
   </div>
@@ -655,6 +657,9 @@ function goToChannel() {
 function goToPersonal() {
   window.open('https://t.me/kirayanovska', '_blank');
 }
+ 
+ function goToInstagram() {
+  window.open('https://instagram.com/kira_yanovskaya.psy', '_blank');
 
 function sendResult() {
   const topType = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
